@@ -3,10 +3,8 @@
 # pip install pyHS100
 import datetime
 import time
-
 import pyHS100
-
-from home_automation.schedule import Schedule
+from schedule import Schedule
 
 
 # abstract this so you can do more than one kind
@@ -44,6 +42,8 @@ def main():
             else:
                 if not control(controller):
                     control(controller, 'on')
+            if abs((now - now.replace(hour=4, minute=5)).total_seconds()) < 60:
+                controllers.update()
         time.sleep(60)
 
 
