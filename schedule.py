@@ -59,18 +59,18 @@ class Schedule:
                     print ('updating twilight for ' + str(controller))
                     self.controllers[controller]['off'] = twilight_begin
 
-        def discover(self):
-            if self.run_type == 'local':
-                devices = 'N'
-                count = 0
-                while len(devices) < len(self.controllers) and count < 20:
-                    devices = pyHS100.Discover.discover()
-                    time.sleep(5)
-                    count += 1
-            else:
-                devices = []
-                for controller in self.controllers:
-                    devices.append(pyHS100.Discover.discover_single(self.controllers[controller]['address']))
+    def discover(self):
+        if self.run_type == 'local':
+            devices = 'N'
+            count = 0
+            while len(devices) < len(self.controllers) and count < 20:
+                devices = pyHS100.Discover.discover()
+                time.sleep(5)
+                count += 1
+        else:
+            devices = []
+            for controller in self.controllers:
+                devices.append(pyHS100.Discover.discover_single(self.controllers[controller]['address']))
 
-            return devices
+        return devices
 
