@@ -2,19 +2,12 @@
 # apt-get install python3-pip
 # pip install pyHS100
 import datetime
-import time
-import pyHS100
 from schedule import Schedule
 
 
 # abstract this so you can do more than one kind
 def control(controller_obj,controller, state='query'):
-    devices = 'N'
-    count = 0
-    while len(devices) < len(controller_obj.controllers) and count < 20:
-        devices = pyHS100.Discover.discover()
-        time.sleep(5)
-        count += 1
+    devices = controller_obj.discover()
 
     for device in devices:
         if devices[device].alias == controller:
@@ -37,14 +30,14 @@ def main():
                                            minute=int(active_controller['on'].split(':')[1]))
                 scheduled_off = now.replace(hour=int(active_controller['off'].split(':')[0]),
                                             minute=int(active_controller['off'].split(':')[1]))
-                if now < scheduled_on and not active_controller.__contains__('sunset'):
+                if now < scheduled_on and not active_controller['sunset']:
                     #print('skipping..')
                     continue
-                elif scheduled_off < now < scheduled_on and active_controller.__contains__('sunset'):
+                elif scheduled_off < now < scheduled_on and active_controller['sunset']:
                      if control(controllers,controller):
                         print("turning " + str(active_controller) + " off")
                         control(controllers,controller, 'off')
-                elif now >= scheduled_off and not active_controller.__contains__('sunset'):
+                elif now >= scheduled_off and not active_controller['sunset']:
                     #print(controller)
                     if control(controllers,controller):
                         print("turning not sunset " + str(active_controller) + " off")
