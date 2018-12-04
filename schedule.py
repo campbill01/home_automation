@@ -24,8 +24,12 @@ class Schedule:
             self.run_type = 'local'
         self.update()
 
-    def _get_controllers(self,config_file='/etc/config/data.json'):
-        data = open(config_file).read()
+    def _get_controllers(self, config_file='/etc/config/data.json'):
+        try:
+            data = open(config_file).read()
+        except:
+            print('Unable to open configuration file, Afraid I have to crash now.')
+            exit(1)
         json_data = json.loads(data)
         # name, on, off, active, sunset,twilight
         self.controllers = {}
