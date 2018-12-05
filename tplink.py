@@ -3,7 +3,7 @@
 # pip install pyHS100
 import datetime
 from schedule import Schedule
-
+import time
 
 # abstract this so you can do more than one kind
 def control(controller_obj,controller, state='query'):
