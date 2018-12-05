@@ -23,7 +23,8 @@ def main():
     controllers = Schedule()
     while True:
         for controller in controllers.controllers:
-            if controllers.controllers[controller]['active']:
+            # json data true is string, and therefore always true?
+            if controllers.controllers[controller]['active'] == 'True':
                 now = datetime.datetime.utcnow()
                 active_controller = controllers.controllers[controller]
                 scheduled_on = now.replace(hour=int(active_controller['on'].split(':')[0]),
