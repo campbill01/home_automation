@@ -72,9 +72,11 @@ class Schedule:
                 time.sleep(5)
                 count += 1
         else:
-            devices = []
+            devices = {}
             for controller in self.controllers:
-                devices.append(pyHS100.Discover.discover_single(self.controllers[controller]['address']))
-
+                address = self.controllers[controller]['address']
+                data = pyHS100.Discover.discover_single(address)
+                devices[address] = data
+                
         return devices
 
