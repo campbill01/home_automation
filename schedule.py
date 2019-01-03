@@ -75,7 +75,11 @@ class Schedule:
             devices = {}
             for controller in self.controllers:
                 address = self.controllers[controller]['address']
-                data = pyHS100.Discover.discover_single(address)
+                try:
+                    data = pyHS100.Discover.discover_single(address)
+                except:
+                    print("Error discovering device at " + address)
+
                 devices[address] = data
                 
         return devices
