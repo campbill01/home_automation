@@ -79,8 +79,9 @@ class Schedule:
                     data = pyHS100.Discover.discover_single(address)
                 except:
                     print("Error discovering device at " + address)
-
-                devices[address] = data
-                
+                try:
+                  devices[address] = data
+                except:
+                  print("data appears to be unset... ?")
         return devices
 
