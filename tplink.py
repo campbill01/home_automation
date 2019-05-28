@@ -31,23 +31,14 @@ def main():
                                            minute=int(active_controller['on'].split(':')[1]))
                 scheduled_off = now.replace(hour=int(active_controller['off'].split(':')[0]),
                                             minute=int(active_controller['off'].split(':')[1]))
-                if now < scheduled_on and not active_controller['sunset']:
-                    #print('skipping..')
-                    continue
-                elif scheduled_off < now < scheduled_on and active_controller['sunset']:
-                     if control(controllers,controller):
-                        print("turning " + str(active_controller) + " off")
-                        control(controllers,controller, 'off')
-                elif now >= scheduled_off and not active_controller['sunset']:
-                    #print(controller)
-                    if control(controllers,controller):
-                        print("turning not sunset " + str(active_controller) + " off")
-                        control(controllers,controller, 'off')
-                else:
-                    #print(controller)
+                if scheduled_on <= now <= scheduled_off:
                     if not control(controllers,controller):
-                        print("turning " + str(active_controller) + " on")
-                        control(controllers,controller, 'on')
+                         print("Turning " + str(active_controller) + " on")
+                         control(controllers,controller, 'on')
+                else:
+                     if control(controllers,controller):
+                          print("turning " + str(active_controller) + " off")
+                          control(controllers,controller, 'off')
                 if abs((now - now.replace(hour=0, minute=5)).total_seconds()) % 14400 == 0:
                     controllers.update()
         print('sleeping...')

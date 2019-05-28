@@ -47,21 +47,24 @@ class Schedule:
         sun_data_url = 'https://api.sunrise-sunset.org/json?lat=' + str(lat) + '&lng=' + str(lon) + '&formatted=0'
         try:
             sun_data = requests.get(sun_data_url).json()['results']
+            print(sun_data)
         except requests.exceptions.ConnectionError as e:
             print(e)
             return
         sunset = sun_data['sunset'].split('T')[1][:5]
         twilight_begin = sun_data['civil_twilight_begin'].split('T')[1][:5]
-        print ("sun set and twilight " + sunset + " " + twilight_begin)
+        print ("sun set is %s and twilight is %s " % (sunset,twilight_begin))
         for controller in self.controllers:
-            if self.controllers[controller]['active']:
+            if self.controllers[controller]['active'] == "True":
                 print(str(controller) + " Is being examined for sunset/twilight")
-                if self.controllers[controller]['sunset']:
+                if self.controllers[controller]['sunset'] == "True":
                     print ('updating sunset for ' + str(controller))
                     self.controllers[controller]['on'] = sunset
-                if self.controllers[controller]['twilight']:
+                    print (self.controllers[controller])
+                if self.controllers[controller]['twilight'] == "True":
                     print ('updating twilight for ' + str(controller))
                     self.controllers[controller]['off'] = twilight_begin
+                    print(self.controllers[controller])
 
     def discover(self):
         if self.run_type == 'local':
