@@ -24,14 +24,14 @@ def main():
     while True:
         for controller in controllers.controllers:
             # json data true is string, and therefore always true?
-            if controllers.controllers[controller]['active'] == 'True':
+            active_controller = controllers.controllers[controller]
+            if active_controller['active'] == 'True':
                 now = datetime.datetime.utcnow()
-                active_controller = controllers.controllers[controller]
                 scheduled_on = now.replace(hour=int(active_controller['on'].split(':')[0]),
                                            minute=int(active_controller['on'].split(':')[1]))
                 scheduled_off = now.replace(hour=int(active_controller['off'].split(':')[0]),
                                             minute=int(active_controller['off'].split(':')[1]))
-                if scheduled_on <= now <= scheduled_off:
+                if (scheduled_on > now < scheduled_off) or (scheduled_on < now > scheduled_off):
                     if not control(controllers,controller):
                          print("Turning " + str(active_controller) + " on")
                          control(controllers,controller, 'on')
@@ -39,7 +39,8 @@ def main():
                      if control(controllers,controller):
                           print("turning " + str(active_controller) + " off")
                           control(controllers,controller, 'off')
-                if abs((now - now.replace(hour=0, minute=5)).total_seconds()) % 14400 == 0:
+            if abs((now - now.replace(hour=0, minute=5)).total_seconds()) % 14400 == 0:
+                    print("Updating sunset and twilight values")
                     controllers.update()
         print('sleeping...')
         time.sleep(60)
